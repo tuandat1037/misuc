@@ -5,7 +5,7 @@
     "artist": "GREY D",
     "album": "Single",
     "cover": "covers/dubao.jpg",
-    "audio": "music/dubaothoitiethomnaymua.mp3",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/dubao.mp3",
     "lyrics": "lyrics/dubao.lrc",
     "duration": 292
   },
@@ -15,7 +15,7 @@
     "artist": "GREY D",
     "album": "Single",
     "cover": "covers/biendao.jpg",
-    "audio": "music/biendao.mp3",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/biendao.mp3",
     "lyrics": "lyrics/biendao.lrc",
     "duration": 240
   }
