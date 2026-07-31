@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "title": "Du bao thoi tiet hom nay mua",
+    "title": "Dự báo thời tiết hôm nay mưa",
     "artist": "GREY D",
     "album": "Single",
     "cover": "covers/dubao.jpg",
@@ -11,12 +11,21 @@
   },
   {
     "id": 2,
-    "title": "Duong toi trieu phu",
+    "title": "Biển đảo và em",
     "artist": "GREY D",
     "album": "Single",
     "cover": "covers/biendao.jpg",
     "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/biendao.mp3",
     "lyrics": "lyrics/biendao.lrc",
-    "duration": 240
+    "duration": 296
+  },{
+    "id": 3,
+    "title": "Tình yêu chậm trễ",
+    "artist": " MONSTAR · GREY D · NICKY · VƯƠNG BÌNH",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/tinhyeuchamtre.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
   }
 ]
