@@ -1,30 +1,138 @@
 [
   {
     "id": 1,
-    "title": "Dự báo thời tiết hôm nay mưa",
-    "artist": "GREY D",
+    "title": "Ai Mới Là Kẻ Xấu Xa",
+    "artist": "MCK",
     "album": "Single",
     "cover": "covers/dubao.jpg",
-    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/dubao.mp3",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/aimoilakexauxa.mp3",
     "lyrics": "lyrics/dubao.lrc",
-    "duration": 292
+    "duration": 191
   },
   {
     "id": 2,
-    "title": "Biển đảo và em",
-    "artist": "GREY D",
+    "title": "Anh Không Muốn Nó Dễ Dàng",
+    "artist": "MCK",
     "album": "Single",
     "cover": "covers/biendao.jpg",
-    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/biendao.mp3",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/anhkomuondedang.mp3",
     "lyrics": "lyrics/biendao.lrc",
     "duration": 296
   },{
     "id": 3,
-    "title": "Tình yêu chậm trễ",
-    "artist": " MONSTAR · GREY D · NICKY · VƯƠNG BÌNH",
+    "title": "Baby",
+    "artist": "MCK ft marzuz",
     "album": "Single",
     "cover": "covers/tinhyeuchamtre.jpg",
-    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/tinhyeuchamtre.mp3",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/baby.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 4,
+    "title": "Cảm Ơn",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/camon.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 5,
+    "title": "Che Phủ",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/chephu.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 6,
+    "title": "Dưa chua",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/duachua.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 7,
+    "title": "Đao Của Anh Vừa",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/daoanhvua.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 8,
+    "title": "Elegie",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/elegie.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 9,
+    "title": "Envy",
+    "artist": "MCK ft THANHDRAW",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/envy.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 10,
+    "title": "Ghet Xog Lai Thik",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/ghetxongthik.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 11,
+    "title": "Huh",
+    "artist": "MCK ft RPT ORIJINN  THANHDRAW",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/huh.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 12,
+    "title": "Hút và Hút",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/hutvahut.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 13,
+    "title": "IDK",
+    "artist": "MCK OFFICIAL MUSIC VIDEO",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/idk.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 14,
+    "title": "IDK",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/idk1.mp3",
+    "lyrics": "lyrics/biendao.lrc",
+    "duration": 245
+  },{
+    "id": 15,
+    "title": "Intenpol",
+    "artist": "MCK",
+    "album": "Single",
+    "cover": "covers/tinhyeuchamtre.jpg",
+    "audio": "https://pub-47f8ba51ef374f45b61677824ea604cf.r2.dev/music/intenpol.mp3",
     "lyrics": "lyrics/biendao.lrc",
     "duration": 245
   }
