@@ -1,0 +1,189 @@
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+/* Tablet & Small Laptop (<= 1024px) */
+@media (max-width: 1024px) {
+    :root {
+        --sidebar-width: 200px;
+        --lyrics-width: 300px;
+    }
+    
+    .main-content {
+        padding: var(--space-4) var(--space-5);
+    }
+    
+    .song-album {
+        display: none;
+    }
+    
+    .featured-banner {
+        padding: var(--space-6);
+    }
+    
+    .banner-cover {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .banner-title {
+        font-size: var(--font-size-xl);
+    }
+}
+
+/* Tablet (<= 768px) */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 0px;
+        --player-height: 64px;
+    }
+    
+    .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr var(--player-height);
+        grid-template-areas:
+            "main"
+            "player";
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: var(--player-height);
+        width: 280px;
+        transform: translateX(-100%);
+        transition: transform var(--transition-slow);
+        z-index: var(--z-overlay);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: var(--shadow-xl);
+    }
+    
+    .main-content {
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    .view-title {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .featured-banner {
+        flex-direction: column-reverse;
+        text-align: center;
+        gap: var(--space-4);
+        padding: var(--space-5);
+    }
+    
+    .banner-cover {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .npb-info {
+        min-width: 120px;
+        max-width: 160px;
+    }
+    
+    .npb-extra {
+        display: none;
+    }
+    
+    .npb-progress {
+        max-width: none;
+    }
+    
+    .song-album {
+        display: none;
+    }
+    
+    .lyrics-panel {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .lyrics-panel.open {
+        right: 0;
+    }
+}
+
+/* Mobile (<= 480px) */
+@media (max-width: 480px) {
+    :root {
+        --player-height: 56px;
+    }
+    
+    .main-content {
+        padding: var(--space-2) var(--space-3);
+    }
+    
+    .view-title {
+        font-size: var(--font-size-xl);
+    }
+    
+    .featured-banner {
+        padding: var(--space-4);
+        border-radius: var(--radius-md);
+    }
+    
+    .banner-cover {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .banner-title {
+        font-size: var(--font-size-lg);
+    }
+    
+    .npb-info {
+        min-width: 80px;
+        max-width: 120px;
+    }
+    
+    .npb-cover {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .npb-details .npb-artist {
+        display: none;
+    }
+    
+    .npb-controls {
+        gap: var(--space-1);
+    }
+    
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .btn-play {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .npb-progress {
+        gap: var(--space-1);
+    }
+    
+    .npb-time {
+        font-size: 10px;
+        min-width: 28px;
+    }
+    
+    .song-cover {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .song-duration {
+        display: none;
+    }
+    
+    .search-bar {
+        margin-bottom: var(--space-3);
+    }
+}

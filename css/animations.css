@@ -1,0 +1,182 @@
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Song item entrance */
+.song-item {
+    animation: fadeInUp var(--transition-normal);
+    animation-fill-mode: both;
+}
+
+.song-item:nth-child(1) { animation-delay: 0ms; }
+.song-item:nth-child(2) { animation-delay: 30ms; }
+.song-item:nth-child(3) { animation-delay: 60ms; }
+.song-item:nth-child(4) { animation-delay: 90ms; }
+.song-item:nth-child(5) { animation-delay: 120ms; }
+.song-item:nth-child(6) { animation-delay: 150ms; }
+.song-item:nth-child(7) { animation-delay: 180ms; }
+.song-item:nth-child(8) { animation-delay: 210ms; }
+.song-item:nth-child(9) { animation-delay: 240ms; }
+.song-item:nth-child(10) { animation-delay: 270ms; }
+
+/* View transitions */
+.view.active {
+    animation: fadeIn var(--transition-normal);
+}
+
+/* Banner entrance */
+.featured-banner {
+    animation: fadeInScale var(--transition-slow);
+}
+
+/* Playing indicator */
+.playing-indicator {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+}
+
+.playing-indicator .bar {
+    width: 3px;
+    background-color: var(--color-primary);
+    border-radius: 1px;
+    animation: playingBars 0.8s ease-in-out infinite;
+}
+
+.playing-indicator .bar:nth-child(1) {
+    height: 8px;
+    animation-delay: 0ms;
+}
+
+.playing-indicator .bar:nth-child(2) {
+    height: 14px;
+    animation-delay: 150ms;
+}
+
+.playing-indicator .bar:nth-child(3) {
+    height: 6px;
+    animation-delay: 300ms;
+}
+
+.playing-indicator .bar:nth-child(4) {
+    height: 12px;
+    animation-delay: 450ms;
+}
+
+@keyframes playingBars {
+    0%, 100% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(0.4);
+    }
+}
+
+/* Ripple effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
