@@ -12,7 +12,6 @@ const STATIC_EXTS = /\.(css|js)$/i;
 // ==================== INSTALL ====================
 self.addEventListener('install', event => {
   console.log('[SW] Install version:', APP_VERSION);
-  // Không cache sẵn gì – skip waiting để activate ngay
   self.skipWaiting();
 });
 
@@ -29,11 +28,9 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    }).then(() => {
-      // Kiểm soát tất cả client ngay lập tức
-      return self.clients.claim();
-    }).then(() => {
-      // Gửi message đến tất cả client để thông báo version mới
+    }).then(() => self.clients.claim())
+    .then(() => {
+      // Gửi version cho tất cả client
       self.clients.matchAll().then(clients => {
         clients.forEach(client => {
           client.postMessage({ type: 'SW_VERSION', version: APP_VERSION });
@@ -41,6 +38,16 @@ self.addEventListener('activate', event => {
       });
     })
   );
+});
+
+// ==================== MESSAGE ====================
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'GET_VERSION') {
+    // Trả lời version qua port của MessageChannel
+    if (event.ports && event.ports[0]) {
+      event.ports[0].postMessage({ type: 'SW_VERSION', version: APP_VERSION });
+    }
+  }
 });
 
 // ==================== FETCH ====================
@@ -69,7 +76,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 4. File nhạc → Network Only (không cache)
+  // 4. File nhạc → Network Only
   if (url.pathname.startsWith('/music/') || AUDIO_EXTS.test(url.pathname)) {
     event.respondWith(networkOnly(request));
     return;
@@ -92,12 +99,9 @@ self.addEventListener('fetch', event => {
 });
 
 // ==================== CHIẾN LƯỢC ====================
-
-// Network First – dùng cho HTML, Manifest
 async function networkFirst(request) {
   try {
     const networkResponse = await fetch(request);
-    // Có thể cache lại để dùng offline (tuỳ chọn)
     return networkResponse;
   } catch (error) {
     const cachedResponse = await caches.match(request);
@@ -105,7 +109,6 @@ async function networkFirst(request) {
   }
 }
 
-// Stale While Revalidate – dùng cho CSS, JS
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(CACHE_NAME);
   const cachedResponse = await cache.match(request);
@@ -118,7 +121,6 @@ async function staleWhileRevalidate(request) {
   return cachedResponse || networkPromise;
 }
 
-// Cache First – dùng cho ảnh
 async function cacheFirst(request) {
   const cachedResponse = await caches.match(request);
   if (cachedResponse) return cachedResponse;
@@ -133,7 +135,6 @@ async function cacheFirst(request) {
   }
 }
 
-// Network Only – dùng cho JSON, nhạc
 async function networkOnly(request) {
   return fetch(request);
 }
