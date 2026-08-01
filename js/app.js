@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
 }
 
 async function checkAndUpdateSW() {
-  // Tránh reload liên tục: nếu đã reload để cập nhật SW thì thôi
+  // Tránh reload loop: nếu đã reload để cập nhật SW thì thôi
   if (sessionStorage.getItem('sw_updated') === 'true') {
     sessionStorage.removeItem('sw_updated');
     console.log('SW update already applied, skipping reload loop.');
