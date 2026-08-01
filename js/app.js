@@ -17,36 +17,41 @@ if ('serviceWorker' in navigator) {
 }
 
 async function checkAndUpdateSW() {
+  // Tránh reload liên tục: nếu đã reload để cập nhật SW thì thôi
+  if (sessionStorage.getItem('sw_updated') === 'true') {
+    sessionStorage.removeItem('sw_updated');
+    console.log('SW update already applied, skipping reload loop.');
+    return;
+  }
+
   try {
-    // Lấy URL tuyệt đối cho service worker (cùng thư mục gốc)
     const swUrl = new URL('../service-worker.js', import.meta.url);
-    
     const registration = await navigator.serviceWorker.getRegistration(swUrl);
-    
+
     if (registration) {
       const activeWorker = registration.active;
       if (activeWorker) {
-        // Hỏi version của SW hiện tại
         const swVersion = await getSWVersion(activeWorker);
         console.log('Current SW version:', swVersion, 'App version:', APP_VERSION);
-        
-        if (swVersion !== APP_VERSION) {
+
+        if (swVersion && swVersion !== APP_VERSION) {
           console.log('SW version mismatch, unregistering old SW...');
           await registration.unregister();
           // Xóa tất cả cache
           const cacheNames = await caches.keys();
           await Promise.all(cacheNames.map(name => caches.delete(name)));
-          // Reload để tải SW mới
+          // Đánh dấu đã cập nhật để lần load sau không reload nữa
+          sessionStorage.setItem('sw_updated', 'true');
           window.location.reload();
           return;
         }
       }
     }
-    
-    // Đăng ký SW mới (hoặc SW hiện tại đã đúng version)
+
+    // Đăng ký SW mới
     const newRegistration = await navigator.serviceWorker.register(swUrl);
     console.log('SW registered:', newRegistration);
-    
+
     newRegistration.addEventListener('updatefound', () => {
       const newWorker = newRegistration.installing;
       newWorker.addEventListener('statechange', () => {
@@ -55,23 +60,25 @@ async function checkAndUpdateSW() {
         }
       });
     });
-    
+
     // Lắng nghe message từ SW
     navigator.serviceWorker.addEventListener('message', (event) => {
       if (event.data && event.data.type === 'SW_VERSION') {
         if (event.data.version !== APP_VERSION) {
           console.log('Version mismatch from SW message, reloading...');
+          sessionStorage.setItem('sw_updated', 'true');
           window.location.reload();
         }
       }
     });
-    
+
     // Khi controller thay đổi (SW mới claim), reload
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       console.log('Controller changed, reloading...');
+      sessionStorage.setItem('sw_updated', 'true');
       window.location.reload();
     });
-    
+
   } catch (error) {
     console.error('SW setup failed:', error);
   }
@@ -91,22 +98,16 @@ function getSWVersion(worker) {
 }
 
 // ==================== FETCH HELPERS ====================
-/**
- * Fetch file JSON với version query và cache: no-store
- * Đảm bảo luôn lấy dữ liệu mới nhất từ server
- * @param {string} path - Đường dẫn tương đối từ thư mục gốc (ví dụ: 'data/music.json')
- */
 async function fetchJSON(path) {
-  // Tạo URL tuyệt đối từ đường dẫn tương đối so với thư mục gốc
-  const base = new URL('..', import.meta.url); // Thư mục gốc (parent của js/)
+  const base = new URL('..', import.meta.url);
   const url = new URL(path, base);
   url.searchParams.set('v', APP_VERSION);
-  
+
   const response = await fetch(url.toString(), {
     cache: 'no-store',
     headers: { 'Cache-Control': 'no-cache' }
   });
-  
+
   if (!response.ok) throw new Error(`Failed to fetch ${path}: ${response.status}`);
   return response.json();
 }
@@ -114,7 +115,6 @@ async function fetchJSON(path) {
 // ==================== INIT ====================
 async function init() {
     try {
-        // Sử dụng fetchJSON thay vì fetch trực tiếp để tránh cache
         const songs = await fetchJSON('data/music.json');
 
         if (!Array.isArray(songs) || songs.length === 0) {
