@@ -1,94 +1,129 @@
-const CACHE_VERSION = 'v1.2.0';
-const STATIC_CACHE = `melodify-static-${CACHE_VERSION}`;
-const MUSIC_CACHE = `melodify-music-${CACHE_VERSION}`;
-const IMAGE_CACHE = `melodify-images-${CACHE_VERSION}`;
+// ==========================================
+// SERVICE WORKER – Melodify Music App
+// ==========================================
+const APP_VERSION = '1.2.0';               // ← Thay đổi mỗi lần deploy
+const CACHE_NAME = `melodify-v${APP_VERSION}`;
 
-// Các file tĩnh cần cache khi cài đặt
-const STATIC_RESOURCES = [
-    './',
-    './index.html',
-    './manifest.json',
-    './css/variables.css',
-    './css/layout.css',
-    './css/style.css',
-    './css/responsive.css',
-    './css/animations.css',
-    './js/app.js',
-    './js/player.js',
-    './js/playlist.js',
-    './js/search.js',
-    './js/favorite.js',
-    './js/storage.js',
-    './js/lyrics.js',
-    './js/ui.js',
-    './js/utils.js',
-    './data/music.json',
-];
+// Các loại file
+const IMAGE_EXTS = /\.(png|jpg|jpeg|gif|svg|webp|ico)$/i;
+const AUDIO_EXTS = /\.(mp3|wav|ogg|flac|m4a)$/i;
+const STATIC_EXTS = /\.(css|js)$/i;
 
-// Cài đặt Service Worker
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(STATIC_CACHE)
-            .then(cache => cache.addAll(STATIC_RESOURCES))
-            .then(() => self.skipWaiting())
-    );
+// ==================== INSTALL ====================
+self.addEventListener('install', event => {
+  console.log('[SW] Install version:', APP_VERSION);
+  // Không cache sẵn gì – skip waiting để activate ngay
+  self.skipWaiting();
 });
 
-// Kích hoạt - xóa cache cũ
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(name => name.startsWith('melodify-') && name !== STATIC_CACHE && name !== MUSIC_CACHE && name !== IMAGE_CACHE)
-                    .map(name => caches.delete(name))
-            );
-        }).then(() => self.clients.claim())
-    );
+// ==================== ACTIVATE ====================
+self.addEventListener('activate', event => {
+  console.log('[SW] Activate version:', APP_VERSION);
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            console.log('[SW] Deleting old cache:', cache);
+            return caches.delete(cache);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
-// Chiến lược fetch: Ưu tiên network, fallback về cache
-self.addEventListener('fetch', (event) => {
-    const { request } = event;
-    const url = new URL(request.url);
+// ==================== FETCH ====================
+self.addEventListener('fetch', event => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
 
-    // Chỉ xử lý request cùng origin
-    if (url.origin !== self.location.origin) return;
+  const url = new URL(request.url);
+  const acceptHeader = request.headers.get('accept') || '';
 
-    // File nhạc: network first
-    if (url.pathname.endsWith('.mp3') || url.pathname.startsWith('/music/')) {
-        event.respondWith(networkFirst(request, MUSIC_CACHE));
-        return;
-    }
+  // 1. HTML (navigation) → Network First
+  if (request.mode === 'navigate' || acceptHeader.includes('text/html')) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
 
-    // Ảnh: network first
-    if (url.pathname.startsWith('/covers/') || url.pathname.startsWith('/assets/')) {
-        event.respondWith(networkFirst(request, IMAGE_CACHE));
-        return;
-    }
+  // 2. Manifest → Network First
+  if (url.pathname.endsWith('manifest.json')) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
 
-    // Lyrics: network first
-    if (url.pathname.startsWith('/lyrics/')) {
-        event.respondWith(networkFirst(request, STATIC_CACHE));
-        return;
-    }
+  // 3. Dữ liệu JSON thường xuyên thay đổi → Network Only
+  if (url.pathname.match(/\/(music|playlist|config)\.json$/)) {
+    event.respondWith(networkOnly(request));
+    return;
+  }
 
-    // Các file tĩnh khác: network first
-    event.respondWith(networkFirst(request, STATIC_CACHE));
+  // 4. File nhạc → Network Only (không cache)
+  if (url.pathname.startsWith('/music/') || AUDIO_EXTS.test(url.pathname)) {
+    event.respondWith(networkOnly(request));
+    return;
+  }
+
+  // 5. CSS, JS → Stale While Revalidate
+  if (STATIC_EXTS.test(url.pathname)) {
+    event.respondWith(staleWhileRevalidate(request));
+    return;
+  }
+
+  // 6. Ảnh → Cache First
+  if (IMAGE_EXTS.test(url.pathname) || url.pathname.startsWith('/covers/') || url.pathname.startsWith('/assets/')) {
+    event.respondWith(cacheFirst(request));
+    return;
+  }
+
+  // 7. Còn lại → Network Only
+  event.respondWith(networkOnly(request));
 });
 
-// Hàm network first: lấy từ mạng trước, nếu lỗi thì lấy cache
-async function networkFirst(request, cacheName) {
-    try {
-        const response = await fetch(request);
-        if (response.ok) {
-            const cache = await caches.open(cacheName);
-            cache.put(request, response.clone());
-        }
-        return response;
-    } catch (error) {
-        const cached = await caches.match(request);
-        if (cached) return cached;
-        throw error;
-    }
+// ==================== CHIẾN LƯỢC ====================
+
+// Network First – dùng cho HTML, Manifest
+async function networkFirst(request) {
+  try {
+    const networkResponse = await fetch(request);
+    // Có thể cache lại để dùng offline (tuỳ chọn)
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    return cachedResponse || new Response('Offline', { status: 408 });
+  }
+}
+
+// Stale While Revalidate – dùng cho CSS, JS
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+
+  const networkPromise = fetch(request).then(networkResponse => {
+    cache.put(request, networkResponse.clone());
+    return networkResponse;
+  }).catch(() => {});
+
+  return cachedResponse || networkPromise;
+}
+
+// Cache First – dùng cho ảnh
+async function cacheFirst(request) {
+  const cachedResponse = await caches.match(request);
+  if (cachedResponse) return cachedResponse;
+
+  try {
+    const networkResponse = await fetch(request);
+    const cache = await caches.open(CACHE_NAME);
+    cache.put(request, networkResponse.clone());
+    return networkResponse;
+  } catch (error) {
+    return new Response('Image not available', { status: 404 });
+  }
+}
+
+// Network Only – dùng cho JSON, nhạc
+async function networkOnly(request) {
+  return fetch(request);
 }
