@@ -29,7 +29,17 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    }).then(() => self.clients.claim())
+    }).then(() => {
+      // Kiểm soát tất cả client ngay lập tức
+      return self.clients.claim();
+    }).then(() => {
+      // Gửi message đến tất cả client để thông báo version mới
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({ type: 'SW_VERSION', version: APP_VERSION });
+        });
+      });
+    })
   );
 });
 
