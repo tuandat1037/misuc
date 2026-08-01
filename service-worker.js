@@ -1,7 +1,7 @@
 // ==========================================
 // SERVICE WORKER – Melodify Music App
 // ==========================================
-const APP_VERSION = '1.2.0';               // ← Thay đổi mỗi lần deploy
+const APP_VERSION = '1.2.0'; // ← Thay đổi mỗi lần deploy
 const CACHE_NAME = `melodify-v${APP_VERSION}`;
 
 // Các loại file
@@ -43,7 +43,6 @@ self.addEventListener('activate', event => {
 // ==================== MESSAGE ====================
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'GET_VERSION') {
-    // Trả lời version qua port của MessageChannel
     if (event.ports && event.ports[0]) {
       event.ports[0].postMessage({ type: 'SW_VERSION', version: APP_VERSION });
     }
@@ -70,7 +69,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 3. Dữ liệu JSON thường xuyên thay đổi → Network Only
+  // 3. Dữ liệu JSON → Network Only (không cache)
   if (url.pathname.match(/\/(music|playlist|config)\.json$/)) {
     event.respondWith(networkOnly(request));
     return;
